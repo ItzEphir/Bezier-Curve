@@ -16,12 +16,13 @@ namespace bieziezie
         Point chosenPoint = null; // выбранная точка
 
         int valuePoints = 4; // количество изначальных точек
-        public float kk = 0.025f; // точность кривой
+        public float kk = 0.05f; // точность кривой
         int counter = 0; // счетчик передвижения точки
         float perfectk; // закрепленное значение точности
         float instantK; // значение параметра двигающейся точки
 
-        bool visible = true; // показывать или нет точки
+        bool visible = false; // показывать или нет точки
+        bool allVisible = false; // показывать абсолютно все точки (осторожно, снижает производительность)
         // сюда можно добавить оскорблений Артема
 
         public Game()
@@ -46,15 +47,6 @@ namespace bieziezie
 
             if (visible)
             {
-                // foreach(Point p in movingPoints)
-                // {
-                //     CircleShape cs = new CircleShape();
-                //     cs.Radius = 10;
-                //     cs.Position = new Vector2f(p.X - cs.Radius, p.Y - cs.Radius);
-                //     cs.FillColor = new Color(255, 0, 0);
-                //     rw.Draw(cs);
-                // }
-
                 foreach(Point p in rightPoints) // рисуем точки кривой
                 {
                     CircleShape cs = new CircleShape();
@@ -62,6 +54,21 @@ namespace bieziezie
                     cs.Position = new Vector2f(p.X - cs.Radius, p.Y - cs.Radius);
                     cs.FillColor = new Color(255, 0, 0);
                     rw.Draw(cs);
+                }
+            }
+
+            if (allVisible)
+            {
+                foreach(List<Point> ls in listsPoints)
+                {
+                    foreach(Point p in ls)
+                    {
+                        CircleShape cs = new CircleShape();
+                        cs.Radius = 10;
+                        cs.Position = new Vector2f(p.X - cs.Radius, p.Y - cs.Radius);
+                        cs.FillColor = new Color(255, 0, 0);
+                        rw.Draw(cs);
+                    }
                 }
             }
 
@@ -92,6 +99,11 @@ namespace bieziezie
 
         public void Next()
         {
+            if (allVisible)
+            {
+                visible = true;
+            }
+
             if(myPoints.Count == 1) 
             {
                 movingPoint = new Point(myPoints[0].coord.X, myPoints[0].coord.Y); // добавляем двигающуюся точку с координатами первой изначальной точки
@@ -164,25 +176,6 @@ namespace bieziezie
                     instantK = perfectk / 10; // обнуляем параметр
                 }
 
-                // foreach (Point point in rightPoints)
-                // {
-                //     movingPoints.Add(new Point(point.X, point.Y));
-                // }
-
-                // for (int i = 0; i < rightPoints.Count - 2; i++)
-                // {
-                //     movingPoints[i].coord -= rightPoints[i].coord.Distance(rightPoints[i + 1].coord) * (rightPoints[i + 1].coord - rightPoints[i].coord).Normalise() * instantK;
-                // }
-                // 
-                // if (instantK < 1)
-                // { 
-                //     instantK += perfectk;
-                // }
-                // else
-                // {
-                //     instantK = perfectk;
-                // }
-
                 if (counter != 10)
                 {
                     counter += 1; // обновляем счетчик кадров
@@ -200,6 +193,9 @@ namespace bieziezie
             {
                 case Keyboard.Key.S:
                     visible = !visible; // делаем видимыми точки
+                    break;
+                case Keyboard.Key.F8:
+                    allVisible = !allVisible;
                     break;
             }
         }
