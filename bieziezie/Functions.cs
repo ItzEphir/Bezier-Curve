@@ -6,19 +6,19 @@ namespace bieziezie
 {
     public static class Functions
     {
-        public static float Distance(this Vector2f a, Vector2f b)
+        public static float Distance(this Vector2f a, Vector2f b) // найти расстояние от одного вектора до другого по теореме Пифагора
         {
             Vector2f diff = a - b;
             return MathF.Sqrt(MathF.Pow(diff.X, 2) + MathF.Pow(diff.Y, 2));
         }
 
-        public static Vector2f Normalise(this Vector2f a)
+        public static Vector2f Normalise(this Vector2f a) // вычисляем вектор направления
         {
             float length = MathF.Sqrt(MathF.Pow(a.X, 2) + MathF.Pow(a.Y, 2));
             Vector2f dir = a / length;
             return dir;
         }
-        public static List<Stick> Connect(this List<Point> listp)
+        public static List<Stick> Connect(this List<Point> listp) // соединяем точки
         {
             List<Stick> list = new List<Stick>();
             if (listp.Count > 1)
@@ -31,7 +31,7 @@ namespace bieziezie
             return list;
         }
 
-        public static int Factorial(this int num)
+        public static int Factorial(this int num) // факториал, который в итоге не понадобился, обидка :((
         {
             int numb = 1;
 
